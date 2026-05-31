@@ -8,6 +8,7 @@
 *.key
 secrets/
 config/local_config.json
+.ipynb_checkpoints/
 
 # ==========================================
 # 2. Python 运行环境与缓存（避免污染仓库）

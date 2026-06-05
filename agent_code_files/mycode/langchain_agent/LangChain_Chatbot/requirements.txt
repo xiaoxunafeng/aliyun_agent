@@ -1,0 +1,11 @@
+langchain
+langchain-deepseek
+langchain-openai
+langchain-tavily
+python-dotenv
+langsmith
+pydantic
+matplotlib
+seaborn
+pandas
+IPython

@@ -1,0 +1,9 @@
+# Python 异步编程最新信息总结
+
+## 1. Python异步编程：从基础到高阶的完整实现指南
+- **来源**: [文心快码](https://comate.baidu.com/zh/page/g6hytf7u8qi)
+- **内容概述**: 在Python中，异步编程通过 `async/await` 语法和 `asyncio` 库实现，能够显著提升I/O密集型任务的性能。本文系统梳理了异步函数的核心机制、并发控制方法及典型应用场景。
+
+## 2. Python异步编程：核心方法与高效IO并发实践
+- **来源**: [文心快码](https://comate.baidu.com/zh/page/2dgqb86weoh)
+- **内容概述**: Python异步编程通过 `async/await` 语法、事件循环和任务管理机制，显著提升了高IO密集型应用的性能。本文详细梳理了协程定义、并发控制、异步IO操作等核心方法。

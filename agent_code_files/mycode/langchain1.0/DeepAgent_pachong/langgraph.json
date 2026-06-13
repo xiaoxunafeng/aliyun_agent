@@ -1,0 +1,12 @@
+{
+  "python_version": "3.11",
+  "dockerfile_lines": [],
+  "dependencies": [
+    "./"
+  ],
+  "graphs": {
+    "chatbot": "./spider_demo.py:agent",
+    "deep_agents": "./deep_agents.py:agent"
+  },
+  "env": ".env"
+}

@@ -1,0 +1,201 @@
+{
+  "website_analysis": {
+    "url": "https://movie.douban.com/",
+    "analysis_date": "2024-01-15",
+    "page_type": "首页",
+    "main_content": "正在热映电影展示"
+  },
+  
+  "movie_data_structure": {
+    "main_container": {
+      "id": "screening",
+      "description": "正在热映电影区域",
+      "css_selector": "#screening",
+      "xpath_selector": "//div[@id='screening']"
+    },
+    
+    "movie_list_container": {
+      "css_selector": "#screening .screening-bd .ui-slide-content",
+      "xpath_selector": "//div[@id='screening']//div[@class='screening-bd']//ul[@class='ui-slide-content']",
+      "item_count": "约20-30部电影（轮播展示）"
+    },
+    
+    "movie_item": {
+      "css_selector": ".ui-slide-item",
+      "xpath_selector": ".//li[@class='ui-slide-item']",
+      "data_attributes": [
+        "data-title", "data-release", "data-rate", "data-star",
+        "data-director", "data-actors", "data-duration", 
+        "data-region", "data-rater", "data-enough"
+      ]
+    }
+  },
+  
+  "data_extraction_selectors": {
+    "movie_title": {
+      "css_selector": ".title a",
+      "xpath_selector": ".//li[@class='title']/a",
+      "data_attribute": "data-title",
+      "extraction_method": "优先使用data-title属性，备用.text()"
+    },
+    
+    "movie_rating": {
+      "css_selector": ".subject-rate",
+      "xpath_selector": ".//span[@class='subject-rate']",
+      "data_attribute": "data-rate",
+      "no_rating_indicator": ".text-tip（显示'暂无评分'）",
+      "extraction_method": "优先使用data-rate属性，备用.text()"
+    },
+    
+    "movie_link": {
+      "css_selector": ".title a",
+      "xpath_selector": ".//li[@class='title']/a",
+      "attribute": "href",
+      "url_pattern": "https://movie.douban.com/subject/{id}/?from=showing"
+    },
+    
+    "movie_poster": {
+      "css_selector": ".poster img",
+      "xpath_selector": ".//li[@class='poster']//img",
+      "attributes": ["src", "alt"],
+      "url_pattern": "https://img[1-9].doubanio.com/view/photo/s_ratio_poster/public/{filename}.webp"
+    },
+    
+    "additional_info": {
+      "release_year": {
+        "data_attribute": "data-release",
+        "description": "上映年份"
+      },
+      "director": {
+        "data_attribute": "data-director",
+        "description": "导演"
+      },
+      "actors": {
+        "data_attribute": "data-actors",
+        "description": "主演"
+      },
+      "duration": {
+        "data_attribute": "data-duration",
+        "description": "电影时长"
+      },
+      "region": {
+        "data_attribute": "data-region",
+        "description": "地区/国家"
+      },
+      "rater_count": {
+        "data_attribute": "data-rater",
+        "description": "评分人数"
+      },
+      "star_level": {
+        "data_attribute": "data-star",
+        "description": "星级（如'40'表示4星）",
+        "mapping": {
+          "00": "无评分",
+          "10": "1星",
+          "15": "1.5星",
+          "20": "2星",
+          "25": "2.5星",
+          "30": "3星",
+          "35": "3.5星",
+          "40": "4星",
+          "45": "4.5星",
+          "50": "5星"
+        }
+      }
+    }
+  },
+  
+  "pagination_analysis": {
+    "homepage_pagination": {
+      "type": "轮播图（幻灯片）",
+      "navigation": {
+        "prev_button": {
+          "css_selector": ".prev-btn .btn-prev",
+          "description": "上一页按钮"
+        },
+        "next_button": {
+          "css_selector": ".next-btn .btn-next",
+          "description": "下一页按钮"
+        },
+        "page_indicator": {
+          "css_selector": ".slide-tip",
+          "format": "{current} / {total}"
+        }
+      },
+      "behavior": "JavaScript控制，点击切换不同电影组"
+    },
+    
+    "other_pages_pagination": {
+      "expected_pattern": "传统列表分页",
+      "parameter": "start（如?start=0, ?start=20）",
+      "page_size": "通常20-30条每页"
+    }
+  },
+  
+  "anti_scraping_detection": {
+    "detected_mechanisms": [],
+    "has_anti_scraping": false,
+    "recommendations": [
+      "添加随机延迟（1-3秒）",
+      "使用随机User-Agent轮换",
+      "设置合理的请求头（Referer, Accept等）",
+      "使用会话保持cookies",
+      "考虑使用代理IP池（如需大量抓取）"
+    ],
+    "risk_level": "低"
+  },
+  
+  "extraction_recommendations": {
+    "strategy": "优先使用data-*属性，备用CSS选择器",
+    "data_priority": [
+      "data-title（完整标题）",
+      "data-rate（评分）",
+      "data-director（导演）",
+      "data-actors（演员）",
+      "data-release（上映年份）"
+    ],
+    
+    "error_handling": {
+      "missing_rating": "检查.text-tip元素或data-star='00'",
+      "truncated_title": "使用data-title获取完整标题",
+      "encoding": "确保UTF-8编码处理"
+    },
+    
+    "performance_optimization": [
+      "使用CSS选择器（性能优于XPath）",
+      "批量提取数据属性",
+      "避免重复DOM查询"
+    ]
+  },
+  
+  "example_extraction_code": {
+    "python_scrapy_example": {
+      "imports": "import scrapy",
+      "selector_example": "movie.css('.ui-slide-item')",
+      "data_extraction": {
+        "title": "movie.attrib.get('data-title', '')",
+        "rating": "movie.css('.subject-rate::text').get()",
+        "link": "movie.css('.title a::attr(href)').get()"
+      }
+    },
+    
+    "python_beautifulsoup_example": {
+      "imports": "from bs4 import BeautifulSoup",
+      "selector_example": "soup.select('#screening .ui-slide-item')",
+      "data_extraction": {
+        "title": "item.get('data-title', '')",
+        "rating": "item.select_one('.subject-rate').text if item.select_one('.subject-rate') else ''"
+      }
+    }
+  },
+  
+  "additional_notes": {
+    "dynamic_content": "部分内容可能通过JavaScript加载，但主要电影数据在初始HTML中",
+    "url_patterns": {
+      "movie_detail": "https://movie.douban.com/subject/{id}/",
+      "poster_images": "https://img[1-9].doubanio.com/view/photo/s_ratio_poster/public/{filename}.webp",
+      "search_page": "https://search.douban.com/movie/subject_search?search_text={query}&cat=1002"
+    },
+    "data_completeness": "data-*属性提供了最完整的电影信息，包括导演、演员等详细信息"
+  }
+}
